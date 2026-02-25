@@ -12,7 +12,6 @@ const validate = (validations: ValidationChain[]) => {
 
         // Exécute chaque validation une par une
         for (const validation of validations) {
-            console.log("TEEEEEEST")
             const result = await validation.run(req);
 
             // Si une validation échoue, on arrête la boucle
