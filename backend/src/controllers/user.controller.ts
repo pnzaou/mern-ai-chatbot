@@ -68,8 +68,8 @@ export const userSignup = async (req: Request, res: Response) => {
         return res.status(201).json({
             message: "Inscription réussie.",
             user: {
-                id: user._id.toString(),
-                name: user.name
+                name: user.name, 
+                email: user.email
             }
         })
     } catch (error) {
@@ -121,7 +121,7 @@ export const userLogin = async (req: Request, res: Response) => {
       signed: true         // Signe le cookie avec le secret défini dans cookie-parser
     })
 
-    return res.status(200).json({message: "Connexion réussie."})
+    return res.status(200).json({message: "Connexion réussie.", name: user.name, email: user.email})
   } catch (error) {
     console.log("User POST /api/signup", error);
 
