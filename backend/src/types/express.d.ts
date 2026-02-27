@@ -20,7 +20,7 @@ declare global {
       // Le type peut être :
       // - string (car jwt.verify peut retourner une string)
       // - JwtPayload (objet contenant les données du token)
-      userId?: string | JwtPayload;
+      userId?: string;
     }
   }
 }

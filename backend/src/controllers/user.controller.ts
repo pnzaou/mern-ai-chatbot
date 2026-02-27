@@ -3,6 +3,7 @@ import User from "../models/user.model.js";
 import bcrypt, {hash} from "bcryptjs";
 import { createToken } from "../utils/token-manager.js";
 import { COOKIE_NAME } from "../utils/constantes.js";
+import mongoose from "mongoose";
 
 export const getAllUsers = async (req: Request, res: Response) => {
   try {
@@ -73,7 +74,7 @@ export const userSignup = async (req: Request, res: Response) => {
             }
         })
     } catch (error) {
-      console.log("User POST /api/signup", error);
+      console.log("User POST /api/user/signup", error);
 
       return res
         .status(500)
@@ -123,12 +124,42 @@ export const userLogin = async (req: Request, res: Response) => {
 
     return res.status(200).json({message: "Connexion réussie.", name: user.name, email: user.email})
   } catch (error) {
-    console.log("User POST /api/signup", error);
+    console.log("User POST /api/user/login", error);
 
     return res
       .status(500)
       .json({
         message: "Erreur lors de l'inscription'",
+        cause: error.message,
+    });
+  }
+}
+
+export const getAuthUser = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req;
+    if(!userId) {
+      return res.status(401).json({message: "Unauthorized"});
+    }
+    
+    const id = new mongoose.Types.ObjectId(userId);
+
+    const user = await User.findById(id);
+    if(!user) {
+      return res.status(404).json({message: "User not found"});
+    }
+
+    return res.status(200).json({message: "Ok", user: {
+      email: user.email,
+      name: user.name
+    }})
+  } catch (error) {
+    console.log("User GET /api/user/auth-status", error);
+
+    return res
+      .status(500)
+      .json({
+        message: "Erreur lors de la récupéartion de l'user connecté.",
         cause: error.message,
     });
   }

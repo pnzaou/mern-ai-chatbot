@@ -11,3 +11,12 @@ export const loginUser = async (email: string, password: string) => {
     const data = res.data;
     return data;
 }
+
+export const checkAuth = async () => {
+    const res = await axiosInstance.get("/user/auth-status");
+    if(res.status !== 200) {
+        throw new Error("Erreur lors de la connexion");
+    }
+    const data = res.data;
+    return data;
+}
